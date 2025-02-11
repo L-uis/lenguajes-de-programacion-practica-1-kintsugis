@@ -12,10 +12,10 @@ buscar :: [Int] -> Int -> Bool
 buscar xs elemento = buscar_aux xs elemento False
   where
     buscar_aux :: [Int] -> Int -> Bool -> Bool
-    buscar_aux [] _ encontrado = encontrado  
-    buscar_aux (x:xs) elemento encontrado
+    buscar_aux [] _ acc = acc  
+    buscar_aux (x:xs) elemento acc
       | x == elemento = True                
-      | otherwise     = buscar_aux xs elemento encontrado  
+      | otherwise     = buscar_aux xs elemento acc
 
 --Funcion sumar_lista : Dada una Lista de Entero , regresa la suma de sus elementos
 --Implementala con recursion de Cola
