@@ -6,16 +6,25 @@ module Practica0 where
 --Funcion buscar : Dada una lista de Enteros y elemento , Regresa verdadero en caso de que el elemento se encuentre en la lista
 --En otro caso regresa False 
 
-buscar::[Int]->Int->Bool
-buscar [] _ = error "Sin implementar"
+--Implementando la busqueda con recursion de cola
 
-
+buscar :: [Int] -> Int -> Bool
+buscar xs elemento = buscar_aux xs elemento False
+  where
+    buscar_aux :: [Int] -> Int -> Bool -> Bool
+    buscar_aux [] _ encontrado = encontrado  
+    buscar_aux (x:xs) elemento encontrado
+      | x == elemento = True                
+      | otherwise     = buscar_aux xs elemento encontrado  
 
 --Funcion sumar_lista : Dada una Lista de Entero , regresa la suma de sus elementos
 --Implementala con recursion de Cola
 sumar_lista::[Int]->Int
-sumar_lista p = error "Sin implementar"
-
+sumar_lista xs = sumar_aux xs  0
+ where 
+    sumar_aux :: [Int] -> Int -> Int 
+    sumar_aux [] acc     = acc  
+    sumar_aux (x:xs) acc = sumar_aux xs (acc + x)
 
 
 --Implementa una funcion recursiva de forma "ordinaria" y despues implementala con recursion de cola
@@ -23,23 +32,37 @@ sumar_lista p = error "Sin implementar"
 --Y porque crees que haya sido asi
 -- :s +t (en el ghci  para ver la estadisticas )
 
+buscar_ordinaria::[Int]->Int->Bool
+buscar_ordinaria [] _ = False
+buscar_ordinaria (x:xs) elemento
+  | x == elemento    = True
+  | otherwise = buscar xs elemento
+
+--funcion de sumar_lista de forma ordinaria
+sumar_lista_ordinaria :: [Int] -> Int
+sumar_lista_ordinaria [] = 0  
+sumar_lista_ordinaria (x:xs) = x + sumar_lista_ordinaria xs
 
 --
 {--funciones--}
 
 --Funcion filter toma un predicado (funcion que regresa booleano) y filtra los elementos la lista de entrada  dada la condicion
 filterB:: (a -> Bool) -> [a] -> [a]
-filterB p [] = error "Sin mplementar"
+filterB _ [] = []
+filterB p (x:xs)
+  | p x       = x : filterB p xs  
+  | otherwise = filterB p xs
 
 --Implementa una funcion llamada mapear que reciba como argumento una funcion y aplique esta funcion a una lista
 mapear:: (a->b) -> [a] -> [b]
-mapear f []  = error "Sin implementar"
+mapear _ [] = [] 
+mapear f (x:xs) = f x : mapear f xs
 
 
 --Decima extra : .2
 --Forma comprehension
 mapear_:: (a->b) -> [a] -> [b]
-mapear_ f list  = error "Sin implementar"
+mapear_ f list = [f x | x <- list]
 
 
 
