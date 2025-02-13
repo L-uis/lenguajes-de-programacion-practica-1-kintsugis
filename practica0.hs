@@ -82,13 +82,17 @@ preorder Empty =  []
 preorder (Node root left right) =  [root] ++  preorder left ++ preorder right
 
 --Hacer una funcion que calcule la altura del arbol ,regresa verdadero en caso de encontrar el eelemento en el arbol
-buscar_tree:: Tree a -> a -> Bool
-buscar_tree Empty e  =  error "Sin implementar"
+buscar_tree:: Eq a => Tree a -> a -> Bool
+buscar_tree Empty _  =  False
+buscar_tree arbol x = let elementos = preorder arbol in
+                      x `elem` elementos
 
 
 --Punto Extra:  Implementa  una funcion que cuente la cantidad de hojas del arbol 
 hojas:: Tree a -> Int
-hojas Empty  = error "Sin implementar"
+hojas Empty  = 0
+hojas (Node raiz Empty Empty) = 1
+hojas (Node raiz izq der) = hojas izq + hojas der
 
 
 --Definicion de Grafica 
@@ -113,7 +117,9 @@ dfs graph v visited
 
 
 isConnected :: Graph -> Bool   --Funcion a Implementar
-isConnected [] = error "Sin implementar"
+isConnected [] = True
+isConnected ((x,vs):xs) = let vertices = dfs ((x,vs):xs) x [] in
+                   length ((x,vs):xs) == length vertices
 
 --Ejemplos
 
@@ -123,13 +129,23 @@ connectedGraph = [(1, [2,3]), (2, [4]), (3, [4,5]), (4, [6]), (5, [6]), (6, [])]
 disconnectedGraph :: Graph
 disconnectedGraph = [(1, [2]), (2, [1]), (3, [4]), (4, [3])] --Debe regresar False 
 
+tree :: Graph
+tree = [(1, [2,3]),(2, [4,5]), (3, [6,7]), (4, []), (5, []), (6, []), (7, [])]
+
 
 --La siguiente funcion verfiica que la grafica es un arbol 
 --Tip : Recuerda que un arbol es una grafica conexa y sin ciclos
 isTree :: Graph -> Bool
-isTree []  = error "Implementar"
+isTree []  = True
+isTree ((x,vs):xs) = isConnected ((x,vs):xs) && not (hayCiclos ((x,vs):xs) [] [x])
+
+hayCiclos :: Graph -> [Vertex] -> [Vertex] -> Bool
+hayCiclos _ _ [] = False
+hayCiclos grafica visitados (x:xs) = x `elem` visitados || hayCiclos grafica (x:visitados) (xs ++ vecinos grafica x)
 
 
 --La siguiente funcion regresa a suma de las hojas del arbol
 leafSum:: Tree Int -> Int 
-leafSum Empty = error "Sin implementar "
+leafSum Empty = 0
+leafSum arbol = let lista = preorder arbol in
+                sumar_lista lista
